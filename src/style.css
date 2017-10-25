@@ -1,0 +1,84 @@
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+#desktop-wrapper {
+    border: 1px solid;
+    width: 500px;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+#desktop-wrapper a {
+    color: black;
+}
+
+#fileStructure {
+    text-transform: capitalize;
+}
+
+#nav-panel {
+    height: 15%;
+    border-bottom: 1px solid;
+}
+
+#fileStructure,
+#nav-panel ul {
+    margin: 0;
+    padding: 10px 0 10px 30px;
+}
+
+#nav-panel ul li i {
+    font-size: 25px;
+    margin-right: 5px;
+}
+
+#fileStructure li,
+#nav-panel ul li {
+    list-style: none;
+    padding: 5px 0;
+    position: relative;
+}
+
+#nav-panel ul li {
+    display: inline-block;
+}
+
+#fileStructure li {
+    display: inline-block;
+    padding: 5px 20px;
+    margin: 5px 10px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);*/
+    border-radius: 5px;
+    text-align: center;
+}
+
+#fileStructure li i {
+    margin: 19px 19px;
+    display: block;
+    font-size: 50px;
+}
+
+#content-panel>h3 {
+    text-align: center;
+}
+
+.fa-plus {
+    float: right;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+.delete {
+    position: absolute;
+    font-size: inherit !important;
+    top: 0;
+    right: 0;
+}

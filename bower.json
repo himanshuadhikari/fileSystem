@@ -1,18 +1,21 @@
 {
-    "name": "fileSystem",
-    "version": "0.1.2",
-    "homepage": "",
-    "authors": [
-        "himanshu adhikari"
-    ],
-    "description": "",
-    "main": "dist/fileSystem.js",
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "src"
-    ]
+  "name": "fileSystem",
+  "version": "0.1.2",
+  "homepage": "",
+  "authors": [
+    "himanshu adhikari"
+  ],
+  "description": "",
+  "main": "dist/fileSystem.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "src"
+  ],
+  "dependencies": {
+    "components-font-awesome": "^4.7.0"
+  }
 }

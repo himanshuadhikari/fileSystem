@@ -14,7 +14,7 @@ module.exports = function(grunt) {
                 options: {
                     livereload: 35730 // livereaload option added!
                 },
-                files: ['src/index.html', 'src/scripts/**/*.js']
+                files: ['src/index.html', 'src/scripts/**/*.js', 'src/**/*.js', 'src/{,*/}*.html']
             }
         },
         connect: {

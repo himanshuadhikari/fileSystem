@@ -1,0 +1,24 @@
+<chanters-element>
+    <template>
+        <style>
+        @import "../../../bower_components/components-font-awesome/css/font-awesome.min.css";
+        @import "../../style.css";
+        </style>
+        <section id="desktop-wrapper">
+            <section id="nav-panel">
+                <ul>
+                    <li on-click="{{getRootFolder(root)}}"><a href=""><i class="fa fa-home" aria-hidden="true"></i>Root</a></li>
+                    <i class="fa fa-plus" on-click="{{createFolder(currentFolder)}}" aria-hidden="true"></i>
+                </ul>
+            </section>
+            <section id="content-panel">
+                <h3 class="{{noFiles}}">No 
+                    <a href = "" on-click="{{addFiles(currentFolder)}}">files</a> 
+                    and <a href = "" on-click="{{createFolder(currentFolder)}}">folders</a>
+                 added yet</h3>
+                <ul id="fileStructure" class="{{hasFiles}}"></ul>
+            </section>
+        </section>
+    </template>
+    <script src="./directory-structure.js"></script>
+</chanters-element>

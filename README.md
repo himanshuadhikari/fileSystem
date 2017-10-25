@@ -15,3 +15,4 @@
 ```fileSys.deleteFile(path||"text.txt" || "home/text.txt");```
 ## Creating a file
 ```fileSys.createFile(path||"text.txt" || "home/text.txt");```
+
