@@ -1,9 +1,27 @@
 Chanters("directory-structure", {
     noFiles: 'hide',
     hasFiles: 'hide',
+    music: ["mp3"],
+    video: ["mp4", "mkv", "avi"],
+    image: ["jpg", "jpeg", "png"],
     currentFolder: {},
     onReady: function() {
         this.getRootFolder();
+    },
+    getFileType: function(fileName) {
+        var extension = fileName.split(".").pop().toLowerCase();
+
+        if (this.music.indexOf(extension) !== -1)
+            return "fa fa-music";
+
+        if (this.video.indexOf(extension) !== -1)
+            return "fa fa-file-video-o ";
+
+        if (this.image.indexOf(extension) !== -1)
+            return "fa fa-picture-o";
+
+        if (extension === "txt")
+            return "fa fa-file";
     },
     getRootFolder: function(event, currentFolder) {
         fs.readDirectory({
@@ -36,32 +54,23 @@ Chanters("directory-structure", {
             return;
 
         var that = this;
-        fs.createFolder(folderPath, function(currentFolder) {
+        fs.createFolder(folderPath, folderObject, function(currentFolder) {
             that.getRootFolder(undefined, that.currentFolder);
-        }, folderObject);
-    },
-    deleteFolder: function(event) {
-        event.stopPropagation();
-        event.preventDefault();
-        var folder = event.currentTarget.folder;
-        var userConfimation = confirm("Empty all items from " + folder.fullPath + "? \n All items in the " + folder.fullPath + " will be permanently deleted.");
-        if (userConfimation) {
-            var that = this;
-            fs.removeRecursively(folder.fullPath, function() {
-                that.getRootFolder();
-            });
-        }
+        });
     },
     createTree: function(folders, target) {
         var that = this;
         folders.forEach(function(folder) {
+            if (folder.isFile)
+                folder.fileType = that.getFileType(folder.name);
+
             var li = document.createElement('li');
             var a = document.createElement('a');
 
             if (folder.isDirectory)
                 var i = '<i class="fa fa-folder" aria-hidden="true"></i><i class="fa fa-trash-o delete" aria-hidden="true"></i>';
             else
-                var i = '<i class="fa fa-file" aria-hidden="true"></i><i class="fa fa-trash-o delete" aria-hidden="true"></i>';
+                var i = '<i class="' + folder.fileType + '" aria-hidden="true"></i><i class="fa fa-trash-o delete" aria-hidden="true"></i>';
 
 
             a.innerHTML = i;
@@ -111,7 +120,44 @@ Chanters("directory-structure", {
             }
         })
     },
-    addFiles: function(event, currentFolder) {
-        console.log("addFiles", currentFolder);
+    addFiles: function(event) {
+        this.$.fileupload.click();
+        var that = this;
+        this.$.fileupload.onchange = function(event) {
+            fs.saveFile({
+                folder: this.currentFolder,
+                files: this.files,
+                onSuccess: function() {
+                    that.getRootFolder();
+                },
+                onError: function() {
+
+                }
+            })
+        };
+    },
+    deleteFolder: function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        var folder = event.currentTarget.folder;
+        var message = folder.isDirectory ? "Empty all items from " + folder.name + "? \n All items in the " + folder.name + " will be permanently deleted." :
+            "Are you sure you want to permanently delete " + folder.name + "? \nIf you delete an item, it will be permanently lost.";
+        var userConfimation = confirm(message);
+        if (userConfimation) {
+            var that = this;
+
+            if (folder.isDirectory)
+                fs.removeRecursively(folder.fullPath, function() {
+                    that.getRootFolder();
+                });
+
+            if (folder.isFile)
+                fs.deleteFile({
+                    file: folder,
+                    onSuccess: function() {
+                        that.getRootFolder();
+                    }
+                });
+        }
     }
 });

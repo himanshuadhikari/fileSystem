@@ -14,11 +14,12 @@
             <section id="content-panel">
                 <h3 class="{{noFiles}}">No 
                     <a href = "" on-click="{{addFiles(currentFolder)}}">files</a> 
+                    <input autocomplete="" type="file" id="fileupload" multiple class="hidden" style="display:none">
                     and <a href = "" on-click="{{createFolder(currentFolder)}}">folders</a>
                  added yet</h3>
                 <ul id="fileStructure" class="{{hasFiles}}"></ul>
             </section>
         </section>
     </template>
-    <script src="./directory-structure.js"></script>
+    <script defer="" src="./directory-structure.js"></script>
 </chanters-element>

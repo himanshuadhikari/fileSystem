@@ -20,7 +20,7 @@
         this.onSuccess = options.onSuccess;
         this.onError = options.onError;
 
-        if (options.folder.fullPath)
+        if (options.folder && options.folder.fullPath)
             this.folder = options.folder;
         else if (typeof options.folder === "string" && options.folder === "root")
             this.folder = _fs;
@@ -74,7 +74,7 @@
         }, utility.errorHandler);
     }
 
-    fileSystem.prototype.createFolder = function(path, callback, folderObject) {
+    fileSystem.prototype.createFolder = function(path, folderObject, callback) {
         var folderObject = folderObject && folderObject.fullPath ? folderObject : _fs;
         if (!path)
             console.error("folder path is required");
@@ -102,12 +102,55 @@
 
     }
 
+    fileSystem.prototype.saveFile = function(options) {
+        this.init(options);
+        var that = this,
+            count = 0,
+            files = options.files;
+
+        if (options.files && options.files.length)
+            save(files[count]);
+
+        function save(file) {
+            that.folder.getFile(file.name, { create: true, exclusive: true }, function(fileEntry) {
+                fileEntry.createWriter(function(fileWriter) {
+                    fileWriter.write(file);
+
+                    count++;
+                    if (files[count])
+                        save(files[count]);
+                    else
+                        that.onSuccess();
+
+                }, utility.errorHandler);
+            }, utility.errorHandler);
+        }
+
+
+    }
+
+    fileSystem.prototype.deleteFile = function(options) {
+        if (options.file && options.file.isFile)
+            remove(options.file);
+        else
+            options.folder.getFile(options.file, { create: false }, function(fileEntry) {
+                remove(fileEntry);
+            }, utility.errorHandler);
+
+        function remove(fileEntry) {
+            fileEntry.remove(function() {
+                console.log('File removed.');
+                options.onSuccess();
+            }, utility.errorHandler);
+        }
+    }
+
     return fileSystem;
 }, function util(callback) {
     var util = {};
 
     util.requestQuota = function() {
-        navigator.webkitPersistentStorage.requestQuota(5 * 1024 * 1024, util.requestFileSystem, this.errorHandler);
+        navigator.webkitPersistentStorage.requestQuota(1000 * 1024 * 1024, util.requestFileSystem, this.errorHandler);
     }
 
     util.requestFileSystem = function(grantedBytes) {
@@ -121,9 +164,6 @@
     }
 
     util.errorHandler = function(e) {
-        // if (this.onError && typeof this.onError === "function")
-        //     this.onError(e);
-
         throw e.message;
     }
 

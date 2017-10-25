@@ -15,7 +15,9 @@
 
 #desktop-wrapper a {
     color: black;
+    word-wrap: break-word;
 }
+
 
 #fileStructure {
     text-transform: capitalize;
@@ -52,17 +54,13 @@
     display: inline-block;
     padding: 5px 20px;
     margin: 5px 10px;
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);*/
     border-radius: 5px;
     text-align: center;
+    width: 25%;
 }
 
 #fileStructure li i {
     margin: 19px 19px;
-    display: block;
     font-size: 50px;
 }
 
