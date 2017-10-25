@@ -1,6 +1,6 @@
 # File System API for browsers
 > This repo is for distribution on bower. File System API for browsers.
-
+demo https://plnkr.co/edit/upeGhA8iLQ9IXBrgUqiO
 # Installation
 
 ```bower install fileSystem```
