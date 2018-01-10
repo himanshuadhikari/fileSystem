@@ -145,12 +145,31 @@
         }
     }
 
+    fileSystem.prototype.readFile = function(options) {
+        var that = this;
+
+        this.init(options);
+
+        this.folder.getFile(options.name, {}, function(fileEntry) {
+            fileEntry.file(function(file) {
+                that.onSuccess(file);
+            })
+        }, errorHandler);
+
+
+    }
+
+
     return fileSystem;
 }, function util(callback) {
     var util = {};
 
+    navigator.webkitPersistentStorage.queryUsageAndQuota(function(usedBytes, grantedBytes) {
+        console.log('we are using ', usedBytes, ' of ', grantedBytes, 'bytes');
+    })
+
     util.requestQuota = function() {
-        navigator.webkitPersistentStorage.requestQuota(1000 * 1024 * 1024, util.requestFileSystem, this.errorHandler);
+        navigator.webkitPersistentStorage.requestQuota(10000 * 1024 * 1024, util.requestFileSystem, this.errorHandler);
     }
 
     util.requestFileSystem = function(grantedBytes) {

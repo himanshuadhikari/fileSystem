@@ -4,9 +4,11 @@ Chanters("directory-structure", {
     music: ["mp3"],
     video: ["mp4", "mkv", "avi"],
     image: ["jpg", "jpeg", "png"],
+    visibilityVideo: 'hide',
+    visibilityImage: 'hide',
     currentFolder: {},
     onReady: function() {
-        this.getRootFolder();
+        // this.getRootFolder();
     },
     getFileType: function(fileName) {
         var extension = fileName.split(".").pop().toLowerCase();
@@ -15,7 +17,7 @@ Chanters("directory-structure", {
             return "fa fa-music";
 
         if (this.video.indexOf(extension) !== -1)
-            return "fa fa-file-video-o ";
+            return "fa fa-file-video-o";
 
         if (this.image.indexOf(extension) !== -1)
             return "fa fa-picture-o";
@@ -91,34 +93,38 @@ Chanters("directory-structure", {
             a.appendChild(em);
             li.appendChild(a);
             target.appendChild(li);
-            console.log(folder);
         });
     },
     getFolder: function(event) {
         event.preventDefault();
         var folder = event.currentTarget.folder;
-        this.currentFolder = folder;
-        fs.readDirectory({
-            folder: folder,
-            onSuccess: function(folders) {
-                if (!folders) return;
 
-                if (!folders.length) {
-                    this.noFiles = 'show';
-                    this.hasFiles = 'hide';
-                }
+        if (folder.isFile) {
+            this.executeFile(folder);
+        } else {
+             this.curhrentFolder = folder;
+            fs.readDirectory({
+                folder: folder,
+                onSuccess: function(folders) {
+                    if (!folders) return;
 
-                if (folders.length) {
-                    this.noFiles = 'hide';
-                    this.hasFiles = 'show';
-                    this.$.fileStructure.innerHTML = "";
-                    this.createTree(folders, this.$.fileStructure);
+                    if (!folders.length) {
+                        this.noFiles = 'show';
+                        this.hasFiles = 'hide';
+                    }
+
+                    if (folders.length) {
+                        this.noFiles = 'hide';
+                        this.hasFiles = 'show';
+                        this.$.fileStructure.innerHTML = "";
+                        this.createTree(folders, this.$.fileStructure);
+                    }
+                }.bind(this),
+                onError: function(error) {
+                    console.log(error);
                 }
-            }.bind(this),
-            onError: function(error) {
-                console.log(error);
-            }
-        })
+            })
+        }
     },
     addFiles: function(event) {
         this.$.fileupload.click();
@@ -159,5 +165,39 @@ Chanters("directory-structure", {
                     }
                 });
         }
+    },
+    executeFile: function(file) {
+        var fileType = this.getFileType(file.name)
+        switch (fileType) {
+            case "fa fa-music":
+                this.playAudio(file);
+                break;
+            case "fa fa-file-video-o":
+                this.playVideo(file);
+                break;
+            case "fa fa-picture-o":
+                this.setImage(file);
+                break;
+        }
+    },
+    playAudio: function(file) {
+        this.$.video.pause();
+        this.$.audio.src = file.toURL();
+        this.$.audio.load();
+        this.$.audio.play();
+        this.visibilityVideo = "hide";
+    },
+    playVideo: function(file) {
+        this.$.audio.pause();
+        this.$.video.src = file.toURL();
+        this.$.video.load();
+        this.$.video.play();
+        this.visibilityImage = "hide";
+        this.visibilityVideo = "show";
+    },
+    setImage: function(file) {
+        this.visibilityImage = "show";
+        this.visibilityVideo = "hide";
+        this.$.img.src = file.toURL();
     }
 });
